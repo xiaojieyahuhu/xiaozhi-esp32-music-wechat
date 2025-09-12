@@ -1069,17 +1069,13 @@ void Esp32Music::PlayAudioStream()
                 packet.payload.resize(pcm_size_bytes);
                 memcpy(packet.payload.data(), final_pcm_data, pcm_size_bytes);
 
-                if (final_pcm_data_fft == nullptr)
+                if (final_pcm_data_fft != nullptr)
                 {
-                    final_pcm_data_fft = (int16_t *)heap_caps_malloc(
-                        final_sample_count * sizeof(int16_t),
-                        MALLOC_CAP_SPIRAM);
+                    heap_caps_free(final_pcm_data_fft);
                 }
-
-                memcpy(
-                    final_pcm_data_fft,
-                    final_pcm_data,
-                    final_sample_count * sizeof(int16_t));
+                final_pcm_data_fft = (int16_t *)heap_caps_malloc(
+                    final_sample_count * sizeof(int16_t),
+                    MALLOC_CAP_SPIRAM);
 
                 ESP_LOGD(TAG, "Sending %d PCM samples (%d bytes, rate=%d, channels=%d->1) to Application",
                          final_sample_count, pcm_size_bytes, mp3_frame_info_.samprate, mp3_frame_info_.nChans);
