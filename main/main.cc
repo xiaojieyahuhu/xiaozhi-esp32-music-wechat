@@ -8,8 +8,6 @@
 #include "application.h"
 #include "system_info.h"
 
-#include <esp_psram.h>
-
 #define TAG "main"
 
 extern "C" void app_main(void)
@@ -26,17 +24,6 @@ extern "C" void app_main(void)
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
-
-    // Detecting PSRAM
-    if (esp_psram_is_initialized())
-    {
-        size_t psram_size = esp_psram_get_size();
-        ESP_LOGI("PSRAM", "PSRAM is available and initialized. Total size: %zu bytes", psram_size);
-    }
-    else
-    {
-        ESP_LOGE("PSRAM", "PSRAM not found or not initialized.");
-    }
 
     // Launch the application
     auto &app = Application::GetInstance();
