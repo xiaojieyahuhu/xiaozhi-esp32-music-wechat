@@ -320,6 +320,7 @@ Esp32Music::~Esp32Music()
 
 bool Esp32Music::Download(const std::string &song_name, const std::string &artist_name)
 {
+    ESP_LOGI(TAG, "云端由MeowEmbeddedMusicServer喵波音律嵌入式提供");
     ESP_LOGI(TAG, "喵波音律QQ交流群:865754861");
     ESP_LOGI(TAG, "Starting to get music details for: %s", song_name.c_str());
 
@@ -407,6 +408,7 @@ bool Esp32Music::Download(const std::string &song_name, const std::string &artis
 
                 current_music_url_ = audio_path;
 
+                ESP_LOGI(TAG, "云端由MeowEmbeddedMusicServer喵波音律嵌入式提供");
                 ESP_LOGI(TAG, "喵波音律QQ交流群:865754861");
                 ESP_LOGI(TAG, "Starting streaming playback for: %s", song_name.c_str());
                 song_name_displayed_ = false; // 重置歌名显示标志
@@ -827,6 +829,7 @@ void Esp32Music::PlayAudioStream()
                         { return buffer_size_ >= MIN_BUFFER_SIZE || (!is_downloading_ && !audio_buffer_.empty()); });
     }
 
+    ESP_LOGI(TAG, "云端由MeowEmbeddedMusicServer喵波音律嵌入式提供");
     ESP_LOGI(TAG, "喵波音律QQ交流群:865754861");
     ESP_LOGI(TAG, "Starting playback with buffer size: %d", buffer_size_);
 
@@ -853,10 +856,14 @@ void Esp32Music::PlayAudioStream()
         auto &app = Application::GetInstance();
         DeviceState current_state = app.GetDeviceState();
 
-        // 等小智把话说完了，变成聆听状态之后，马上转成待机状态，进入音乐播放
-        if (current_state == kDeviceStateListening)
-        {
-            ESP_LOGI(TAG, "Device is in listening state, switching to idle state for music playback");
+        // 状态转换：说话中-》聆听中-》待机状态-》播放音乐
+        if (current_state == kDeviceStateListening || current_state == kDeviceStateSpeaking) {
+            if (current_state == kDeviceStateSpeaking) {
+                ESP_LOGI(TAG, "Device is in speaking state, switching to listening state for music playback");
+            }
+            if (current_state == kDeviceStateListening) {
+                ESP_LOGI(TAG, "Device is in listening state, switching to idle state for music playback");
+            }
             // 切换状态
             app.ToggleChatState(); // 变成待机状态
             vTaskDelay(pdMS_TO_TICKS(300));
@@ -1288,7 +1295,8 @@ bool Esp32Music::DownloadLyrics(const std::string &lyric_url)
         add_auth_headers(http.get());
 
         // 打开GET连接
-        ESP_LOGI(TAG, "小智开源音乐固件qq交流群:826072986");
+        ESP_LOGI(TAG, "云端由MeowEmbeddedMusicServer喵波音律嵌入式提供");
+        ESP_LOGI(TAG, "喵波音律QQ交流群:865754861");
         if (!http->Open("GET", current_url))
         {
             ESP_LOGE(TAG, "Failed to open HTTP connection for lyrics");
