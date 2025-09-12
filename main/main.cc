@@ -24,6 +24,13 @@ extern "C" void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
+    // Detecting PSRAM
+    if (esp_spiram_is_initialized()) {
+        ESP_LOGI("PSRAM", "PSRAM is available and initialized.");
+    } else {
+        ESP_LOGE("PSRAM", "PSRAM not found or not initialized.");
+    }
+
     // Launch the application
     auto& app = Application::GetInstance();
     app.Start();

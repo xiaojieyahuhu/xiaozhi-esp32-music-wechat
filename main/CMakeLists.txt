@@ -23,7 +23,7 @@ set(SOURCES "audio/audio_codec.cc"
             "ota.cc"
             "settings.cc"
             "device_state_event.cc"
-            "main.cc"
+           
             )
 
 set(INCLUDE_DIRS "." "display" "audio" "protocols")
