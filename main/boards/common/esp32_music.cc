@@ -126,41 +126,41 @@ static std::string url_encode(const std::string& str) {
     return encoded;
 }
 
-// 在文件开头添加一个辅助函数，统一处理URL构建
-static std::string buildUrlWithParams(const std::string& base_url, const std::string& path, const std::string& query) {
-    std::string result_url = base_url + path + "?";
-    size_t pos = 0;
-    size_t amp_pos = 0;
-    
-    while ((amp_pos = query.find("&", pos)) != std::string::npos) {
-        std::string param = query.substr(pos, amp_pos - pos);
-        size_t eq_pos = param.find("=");
-        
-        if (eq_pos != std::string::npos) {
-            std::string key = param.substr(0, eq_pos);
-            std::string value = param.substr(eq_pos + 1);
-            result_url += key + "=" + url_encode(value) + "&";
-        } else {
-            result_url += param + "&";
-        }
-        
-        pos = amp_pos + 1;
-    }
-    
-    // 处理最后一个参数
-    std::string last_param = query.substr(pos);
-    size_t eq_pos = last_param.find("=");
-    
-    if (eq_pos != std::string::npos) {
-        std::string key = last_param.substr(0, eq_pos);
-        std::string value = last_param.substr(eq_pos + 1);
-        result_url += key + "=" + url_encode(value);
-    } else {
-        result_url += last_param;
-    }
-    
-    return result_url;
-}
+//// 在文件开头添加一个辅助函数，统一处理URL构建
+//static std::string buildUrlWithParams(const std::string& base_url, const std::string& path, const std::string& query) {
+//    std::string result_url = base_url + path + "?";
+//    size_t pos = 0;
+//    size_t amp_pos = 0;
+//    
+//    while ((amp_pos = query.find("&", pos)) != std::string::npos) {
+//        std::string param = query.substr(pos, amp_pos - pos);
+//        size_t eq_pos = param.find("=");
+//        
+//        if (eq_pos != std::string::npos) {
+//            std::string key = param.substr(0, eq_pos);
+//            std::string value = param.substr(eq_pos + 1);
+//            result_url += key + "=" + url_encode(value) + "&";
+//        } else {
+//            result_url += param + "&";
+//        }
+//        
+//        pos = amp_pos + 1;
+//    }
+//    
+//    // 处理最后一个参数
+//    std::string last_param = query.substr(pos);
+//    size_t eq_pos = last_param.find("=");
+//    
+//    if (eq_pos != std::string::npos) {
+//        std::string key = last_param.substr(0, eq_pos);
+//        std::string value = last_param.substr(eq_pos + 1);
+//        result_url += key + "=" + url_encode(value);
+//    } else {
+//        result_url += last_param;
+//    }
+//    
+//    return result_url;
+//}
 
 Esp32Music::Esp32Music() : last_downloaded_data_(), current_music_url_(), current_song_name_(),
                          song_name_displayed_(false), current_lyric_url_(), lyrics_(), 
@@ -302,6 +302,9 @@ bool Esp32Music::Download(const std::string& song_name, const std::string& artis
     // 使用Board提供的HTTP客户端
     auto network = Board::GetInstance().GetNetwork();
     auto http = network->CreateHttp(0);
+
+    // 复用连接（服务端支持 Keep-Alive）
+    http->SetHeader("Connection", "keep-alive");
     
     // 设置基本请求头
     http->SetHeader("User-Agent", "ESP32-Music-Player/1.0");
@@ -315,6 +318,9 @@ bool Esp32Music::Download(const std::string& song_name, const std::string& artis
         ESP_LOGE(TAG, "Failed to connect to music API");
         return false;
     }
+
+    // 添加超时
+    http->SetTimeout(15000);
     
     // 检查响应状态码
     int status_code = http->GetStatusCode();
