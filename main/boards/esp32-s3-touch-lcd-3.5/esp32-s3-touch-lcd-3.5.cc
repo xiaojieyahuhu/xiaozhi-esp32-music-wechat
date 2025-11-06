@@ -29,6 +29,11 @@
 
 #define TAG "waveshare_lcd_3_5"
 
+
+LV_FONT_DECLARE(font_puhui_16_4);
+LV_FONT_DECLARE(font_awesome_16_4);
+
+
 class Pmic : public Axp2101 {
     public:
         Pmic(i2c_master_bus_handle_t i2c_bus, uint8_t addr) : Axp2101(i2c_bus, addr) {
@@ -61,6 +66,7 @@ class Pmic : public Axp2101 {
         }
     };
 
+
 typedef struct {
     int cmd;                /*<! The specific LCD command */
     const void *data;       /*<! Buffer that holds the command specific data */
@@ -75,6 +81,7 @@ typedef struct {
                                                  */
     uint16_t init_cmds_size;                    /*<! Number of commands in above array */
 } st7796_vendor_config_t;
+
 
 st7796_lcd_init_cmd_t st7796_lcd_init_cmds[] = {
     {0x11, (uint8_t []){ 0x00 }, 0, 120},
@@ -98,6 +105,7 @@ st7796_lcd_init_cmd_t st7796_lcd_init_cmds[] = {
     {0x21, (uint8_t []){ 0x00 }, 0, 0},
     {0x29, (uint8_t []){ 0x00 }, 0, 0},
 };
+
 
 class CustomBoard : public WifiBoard {
 private:
@@ -283,7 +291,8 @@ private:
         panel_config.vendor_config = &st7796_vendor_config;
 
         ESP_ERROR_CHECK(esp_lcd_new_panel_st7789(panel_io, &panel_config, &panel));
-
+         
+       
         esp_lcd_panel_reset(panel);
  
         esp_lcd_panel_init(panel);
@@ -291,8 +300,15 @@ private:
         esp_lcd_panel_swap_xy(panel, DISPLAY_SWAP_XY);
         esp_lcd_panel_mirror(panel, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y);
 
+        
+
         display_ = new SpiLcdDisplay(panel_io, panel,
-                                    DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+                                    DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY,
+                                    {
+                                        .text_font = &font_puhui_16_4,
+                                        .icon_font = &font_awesome_16_4,
+                                        .emoji_font = font_emoji_32_init(),
+                                    });
     }
 
     void InitializeButtons() {

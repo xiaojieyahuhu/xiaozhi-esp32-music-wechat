@@ -126,52 +126,51 @@ static std::string url_encode(const std::string& str) {
     return encoded;
 }
 
-//// 在文件开头添加一个辅助函数，统一处理URL构建
-//static std::string buildUrlWithParams(const std::string& base_url, const std::string& path, const std::string& query) {
-//    std::string result_url = base_url + path + "?";
-//    size_t pos = 0;
-//    size_t amp_pos = 0;
-//    
-//    while ((amp_pos = query.find("&", pos)) != std::string::npos) {
-//        std::string param = query.substr(pos, amp_pos - pos);
-//        size_t eq_pos = param.find("=");
-//        
-//        if (eq_pos != std::string::npos) {
-//            std::string key = param.substr(0, eq_pos);
-//            std::string value = param.substr(eq_pos + 1);
-//            result_url += key + "=" + url_encode(value) + "&";
-//        } else {
-//            result_url += param + "&";
-//        }
-//        
-//        pos = amp_pos + 1;
-//    }
-//    
-//    // 处理最后一个参数
-//    std::string last_param = query.substr(pos);
-//    size_t eq_pos = last_param.find("=");
-//    
-//    if (eq_pos != std::string::npos) {
-//        std::string key = last_param.substr(0, eq_pos);
-//        std::string value = last_param.substr(eq_pos + 1);
-//        result_url += key + "=" + url_encode(value);
-//    } else {
-//        result_url += last_param;
-//    }
-//    
-//    return result_url;
-//}
+// 在文件开头添加一个辅助函数，统一处理URL构建
+static std::string buildUrlWithParams(const std::string& base_url, const std::string& path, const std::string& query) {
+    std::string result_url = base_url + path + "?";
+    size_t pos = 0;
+    size_t amp_pos = 0;
+    
+    while ((amp_pos = query.find("&", pos)) != std::string::npos) {
+        std::string param = query.substr(pos, amp_pos - pos);
+        size_t eq_pos = param.find("=");
+        
+        if (eq_pos != std::string::npos) {
+            std::string key = param.substr(0, eq_pos);
+            std::string value = param.substr(eq_pos + 1);
+            result_url += key + "=" + url_encode(value) + "&";
+        } else {
+            result_url += param + "&";
+        }
+        
+        pos = amp_pos + 1;
+    }
+    
+    // 处理最后一个参数
+    std::string last_param = query.substr(pos);
+    size_t eq_pos = last_param.find("=");
+    
+    if (eq_pos != std::string::npos) {
+        std::string key = last_param.substr(0, eq_pos);
+        std::string value = last_param.substr(eq_pos + 1);
+        result_url += key + "=" + url_encode(value);
+    } else {
+        result_url += last_param;
+    }
+    
+    return result_url;
+}
 
 Esp32Music::Esp32Music() : last_downloaded_data_(), current_music_url_(), current_song_name_(),
                          song_name_displayed_(false), current_lyric_url_(), lyrics_(), 
                          current_lyric_index_(-1), lyric_thread_(), is_lyric_running_(false),
                          display_mode_(DISPLAY_MODE_LYRICS), is_playing_(false), is_downloading_(false), 
-                         is_paused_(false), play_thread_(), download_thread_(), audio_buffer_(), buffer_mutex_(), 
+                         play_thread_(), download_thread_(), audio_buffer_(), buffer_mutex_(), 
                          buffer_cv_(), buffer_size_(0), mp3_decoder_(nullptr), mp3_frame_info_(), 
                          mp3_decoder_initialized_(false) {
     ESP_LOGI(TAG, "Music player initialized with default spectrum display mode");
-    // 延迟MP3解码器初始化，避免在构造函数中初始化导致的问题
-    // InitializeMp3Decoder();
+    InitializeMp3Decoder();
 }
 
 Esp32Music::~Esp32Music() {
@@ -283,9 +282,8 @@ Esp32Music::~Esp32Music() {
 }
 
 bool Esp32Music::Download(const std::string& song_name, const std::string& artist_name) {
+    ESP_LOGI(TAG, "小智开源音乐固件qq交流群:826072986");
     ESP_LOGI(TAG, "Starting to get music details for: %s", song_name.c_str());
-    ESP_LOGI(TAG, "云端由MeowEmbeddedMusicServer喵波音律嵌入式提供");
-    ESP_LOGI(TAG, "喵波音律QQ交流群:865754861");
     
     // 清空之前的下载数据
     last_downloaded_data_.clear();
@@ -294,7 +292,7 @@ bool Esp32Music::Download(const std::string& song_name, const std::string& artis
     current_song_name_ = song_name;
     
     // 第一步：请求stream_pcm接口获取音频信息
-    std::string base_url = "http://http-embedded-music.miao-lab.top:2233";
+    std::string base_url = "http://www.xiaozhishop.xyz:5005";
     std::string full_url = base_url + "/stream_pcm?song=" + url_encode(song_name) + "&artist=" + url_encode(artist_name);
     
     ESP_LOGI(TAG, "Request URL: %s", full_url.c_str());
@@ -302,9 +300,6 @@ bool Esp32Music::Download(const std::string& song_name, const std::string& artis
     // 使用Board提供的HTTP客户端
     auto network = Board::GetInstance().GetNetwork();
     auto http = network->CreateHttp(0);
-
-    // 复用连接（服务端支持 Keep-Alive）
-    http->SetHeader("Connection", "keep-alive");
     
     // 设置基本请求头
     http->SetHeader("User-Agent", "ESP32-Music-Player/1.0");
@@ -318,9 +313,6 @@ bool Esp32Music::Download(const std::string& song_name, const std::string& artis
         ESP_LOGE(TAG, "Failed to connect to music API");
         return false;
     }
-
-    // 添加超时
-    http->SetTimeout(15000);
     
     // 检查响应状态码
     int status_code = http->GetStatusCode();
@@ -364,17 +356,38 @@ bool Esp32Music::Download(const std::string& song_name, const std::string& artis
             if (cJSON_IsString(audio_url) && audio_url->valuestring && strlen(audio_url->valuestring) > 0) {
                 ESP_LOGI(TAG, "Audio URL path: %s", audio_url->valuestring);
                 
-                // 第二步：直接使用音频URL开始流式播放
-                std::string current_music_url_ = audio_url->valuestring;
+                // 第二步：拼接完整的音频下载URL，确保对audio_url进行URL编码
+                std::string audio_path = audio_url->valuestring;
                 
+                // 使用统一的URL构建功能
+                if (audio_path.find("?") != std::string::npos) {
+                    size_t query_pos = audio_path.find("?");
+                    std::string path = audio_path.substr(0, query_pos);
+                    std::string query = audio_path.substr(query_pos + 1);
+                    
+                    current_music_url_ = buildUrlWithParams(base_url, path, query);
+                } else {
+                    current_music_url_ = base_url + audio_path;
+                }
+                
+                ESP_LOGI(TAG, "小智开源音乐固件qq交流群:826072986");
                 ESP_LOGI(TAG, "Starting streaming playback for: %s", song_name.c_str());
                 song_name_displayed_ = false;  // 重置歌名显示标志
                 StartStreaming(current_music_url_);
                 
                 // 处理歌词URL - 只有在歌词显示模式下才启动歌词
                 if (cJSON_IsString(lyric_url) && lyric_url->valuestring && strlen(lyric_url->valuestring) > 0) {
-                    // 使用歌词URL获取歌词
-                    std::string current_lyric_url_ = lyric_url->valuestring;
+                    // 拼接完整的歌词下载URL，使用相同的URL构建逻辑
+                    std::string lyric_path = lyric_url->valuestring;
+                    if (lyric_path.find("?") != std::string::npos) {
+                        size_t query_pos = lyric_path.find("?");
+                        std::string path = lyric_path.substr(0, query_pos);
+                        std::string query = lyric_path.substr(query_pos + 1);
+                        
+                        current_lyric_url_ = buildUrlWithParams(base_url, path, query);
+                    } else {
+                        current_lyric_url_ = base_url + lyric_path;
+                    }
                     
                     // 根据显示模式决定是否启动歌词
                     if (display_mode_ == DISPLAY_MODE_LYRICS) {
@@ -433,14 +446,6 @@ bool Esp32Music::StartStreaming(const std::string& music_url) {
     }
     
     ESP_LOGD(TAG, "Starting streaming for URL: %s", music_url.c_str());
-    
-    // 确保MP3解码器已初始化
-    if (!mp3_decoder_initialized_) {
-        if (!InitializeMp3Decoder()) {
-            ESP_LOGE(TAG, "Failed to initialize MP3 decoder");
-            return false;
-        }
-    }
     
     // 停止之前的播放和下载
     is_downloading_ = false;
@@ -502,7 +507,6 @@ bool Esp32Music::StopStreaming() {
     // 停止下载和播放标志
     is_downloading_ = false;
     is_playing_ = false;
-    is_paused_ = false;  // 重置暂停状态
     
     // 清空歌名显示
     auto& board = Board::GetInstance();
@@ -735,6 +739,7 @@ void Esp32Music::PlayAudioStream() {
         });
     }
     
+    ESP_LOGI(TAG, "小智开源音乐固件qq交流群:826072986");
     ESP_LOGI(TAG, "Starting playback with buffer size: %d", buffer_size_);
     
     size_t total_played = 0;
@@ -754,13 +759,6 @@ void Esp32Music::PlayAudioStream() {
     bool id3_processed = false;
     
     while (is_playing_) {
-        // 检查是否被暂停
-        if (is_paused_) {
-            ESP_LOGD(TAG, "Music playback paused, waiting...");
-            vTaskDelay(pdMS_TO_TICKS(100));
-            continue;
-        }
-        
         // 检查设备状态，只有在空闲状态才播放音乐
         auto& app = Application::GetInstance();
         DeviceState current_state = app.GetDeviceState();
@@ -1150,6 +1148,7 @@ bool Esp32Music::DownloadLyrics(const std::string& lyric_url) {
         add_auth_headers(http.get());
         
         // 打开GET连接
+        ESP_LOGI(TAG, "小智开源音乐固件qq交流群:826072986");
         if (!http->Open("GET", current_url)) {
             ESP_LOGE(TAG, "Failed to open HTTP connection for lyrics");
             // 移除delete http; 因为unique_ptr会自动管理内存
@@ -1441,99 +1440,4 @@ void Esp32Music::SetDisplayMode(DisplayMode mode) {
     ESP_LOGI(TAG, "Display mode changed from %s to %s", 
             (old_mode == DISPLAY_MODE_SPECTRUM) ? "SPECTRUM" : "LYRICS",
             (mode == DISPLAY_MODE_SPECTRUM) ? "SPECTRUM" : "LYRICS");
-}
-
-// MCP工具需要的方法实现
-bool Esp32Music::SetVolume(int volume) {
-    ESP_LOGI(TAG, "SetVolume called with volume: %d", volume);
-    
-    // 验证音量范围
-    if (volume < 0 || volume > 100) {
-        ESP_LOGW(TAG, "Invalid volume level: %d, must be between 0-100", volume);
-        return false;
-    }
-    
-    // 通过Board获取AudioCodec并设置音量
-    auto& board = Board::GetInstance();
-    auto codec = board.GetAudioCodec();
-    if (codec) {
-        codec->SetOutputVolume(volume);
-        ESP_LOGI(TAG, "Volume set to %d%%", volume);
-        return true;
-    } else {
-        ESP_LOGE(TAG, "No audio codec available");
-        return false;
-    }
-}
-
-bool Esp32Music::PlaySong() {
-    ESP_LOGI(TAG, "PlaySong called");
-    return false;
-}
-
-bool Esp32Music::StopSong() {
-    ESP_LOGI(TAG, "StopSong called");
-    return StopStreaming();
-}
-
-bool Esp32Music::PauseSong() {
-    ESP_LOGI(TAG, "PauseSong called");
-    
-    // 检查是否正在播放
-    if (!is_playing_) {
-        ESP_LOGW(TAG, "No music is currently playing");
-        return false;
-    }
-    
-    // 检查是否已经暂停
-    if (is_paused_) {
-        ESP_LOGW(TAG, "Music is already paused");
-        return true;
-    }
-    
-    // 设置暂停标志
-    is_paused_ = true;
-    ESP_LOGI(TAG, "Music playback paused");
-    
-    // 更新显示状态
-    auto& board = Board::GetInstance();
-    auto display = board.GetDisplay();
-    if (display && !current_song_name_.empty()) {
-        std::string formatted_song_name = "《" + current_song_name_ + "》已暂停";
-        display->SetMusicInfo(formatted_song_name.c_str());
-        ESP_LOGI(TAG, "Updated display: %s", formatted_song_name.c_str());
-    }
-    
-    return true;
-}
-
-bool Esp32Music::ResumeSong() {
-    ESP_LOGI(TAG, "ResumeSong called");
-    
-    // 检查是否正在播放
-    if (!is_playing_) {
-        ESP_LOGW(TAG, "No music is currently playing");
-        return false;
-    }
-    
-    // 检查是否已经恢复
-    if (!is_paused_) {
-        ESP_LOGW(TAG, "Music is not paused");
-        return true;
-    }
-    
-    // 清除暂停标志
-    is_paused_ = false;
-    ESP_LOGI(TAG, "Music playback resumed");
-    
-    // 更新显示状态
-    auto& board = Board::GetInstance();
-    auto display = board.GetDisplay();
-    if (display && !current_song_name_.empty()) {
-        std::string formatted_song_name = "《" + current_song_name_ + "》播放中...";
-        display->SetMusicInfo(formatted_song_name.c_str());
-        ESP_LOGI(TAG, "Updated display: %s", formatted_song_name.c_str());
-    }
-    
-    return true;
 }

@@ -17,6 +17,9 @@
 
 #define TAG "Yuying_313lcd"
 
+LV_FONT_DECLARE(font_puhui_30_4);
+LV_FONT_DECLARE(font_awesome_30_4);
+
 class Yuying_313lcd : public WifiBoard {
 private:
     i2c_master_bus_handle_t codec_i2c_bus_;
@@ -100,9 +103,13 @@ private:
 
         display_ = new RgbLcdDisplay(panel_io, panel_handle,
                                   DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X,
-                                  DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+                                  DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY,
+                                  {
+                                      .text_font = &font_puhui_30_4,
+                                      .icon_font = &font_awesome_30_4,
+                                      .emoji_font = font_emoji_64_init(),
+                                  });
     }
-
     void InitializeCodecI2c() {
         // Initialize I2C peripheral
         i2c_master_bus_config_t i2c_bus_cfg = {

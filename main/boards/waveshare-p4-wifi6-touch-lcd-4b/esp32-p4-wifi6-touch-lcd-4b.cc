@@ -19,6 +19,9 @@
 #include "esp_lcd_touch_gt911.h"
 #define TAG "WaveshareEsp32p44b"
 
+LV_FONT_DECLARE(font_puhui_30_4);
+LV_FONT_DECLARE(font_awesome_30_4);
+
 class WaveshareEsp32p44b : public WifiBoard {
 private:
     i2c_master_bus_handle_t i2c_bus_;
@@ -112,7 +115,12 @@ private:
         esp_lcd_panel_init(disp_panel);
 
         display_ = new MipiLcdDisplay(io, disp_panel, DISPLAY_WIDTH, DISPLAY_HEIGHT,
-                                       DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+                                       DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY,
+                                       {
+                                           .text_font = &font_puhui_30_4,
+                                           .icon_font = &font_awesome_30_4,
+                                           .emoji_font = font_emoji_64_init(),
+                                       });
     }
     void InitializeTouch()
     {
@@ -189,7 +197,6 @@ public:
         static PwmBacklight backlight(DISPLAY_BACKLIGHT_PIN, DISPLAY_BACKLIGHT_OUTPUT_INVERT);
         return &backlight;
     }
-
 };
 
 DECLARE_BOARD(WaveshareEsp32p44b);

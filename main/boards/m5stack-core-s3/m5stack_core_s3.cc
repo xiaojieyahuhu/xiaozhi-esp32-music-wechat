@@ -16,7 +16,11 @@
 #include <esp_timer.h>
 #include "esp32_camera.h"
 
+
 #define TAG "M5StackCoreS3Board"
+
+LV_FONT_DECLARE(font_puhui_20_4);
+LV_FONT_DECLARE(font_awesome_20_4);
 
 class Pmic : public Axp2101 {
 public:
@@ -40,6 +44,7 @@ public:
     }
 };
 
+
 class CustomBacklight : public Backlight {
 public:
     CustomBacklight(Pmic *pmic) : pmic_(pmic) {}
@@ -52,6 +57,7 @@ public:
 private:
     Pmic *pmic_;
 };
+
 
 class Aw9523 : public I2cDevice {
 public:
@@ -116,6 +122,7 @@ private:
     uint8_t* read_buffer_ = nullptr;
     TouchPoint_t tp_;
 };
+
 
 class M5StackCoreS3Board : public WifiBoard {
 private:
@@ -287,7 +294,16 @@ private:
         esp_lcd_panel_mirror(panel, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y);
 
         display_ = new SpiLcdDisplay(panel_io, panel,
-                                    DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+                                    DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY,
+                                    {
+                                        .text_font = &font_puhui_20_4,
+                                        .icon_font = &font_awesome_20_4,
+#if CONFIG_USE_WECHAT_MESSAGE_STYLE
+                                        .emoji_font = font_emoji_32_init(),
+#else
+                                        .emoji_font = font_emoji_64_init(),
+#endif
+                                    });
     }
 
      void InitializeCamera() {

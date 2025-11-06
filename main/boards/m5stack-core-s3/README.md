@@ -1,18 +1,22 @@
 # 使用说明 
 
 
-**编译**
+1. 设置编译目标为 esp32s3
 
-```bash
-python ./scripts/release.py m5stack-core-s3
+```shell
+idf.py set-target esp32s3
 ```
 
-如需手动编译，请参考 `m5stack-core-s3/config.json` 修改 menuconfig 对应选项。
+2. 修改配置 
 
-**烧录**
+```shell
+cp main/boards/m5stack-core-s3/sdkconfig.cores3 sdkconfig
+```
 
-```bash
-idf.py flash
+3. 编译烧录程序
+
+```shell
+idf.py build flash monitor
 ```
 
 > [!NOTE]

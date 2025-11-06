@@ -155,7 +155,6 @@ void Es8311AudioCodec::SetOutputVolume(int volume) {
 }
 
 void Es8311AudioCodec::EnableInput(bool enable) {
-    std::lock_guard<std::mutex> lock(data_if_mutex_);
     if (enable == input_enabled_) {
         return;
     }
@@ -164,7 +163,6 @@ void Es8311AudioCodec::EnableInput(bool enable) {
 }
 
 void Es8311AudioCodec::EnableOutput(bool enable) {
-    std::lock_guard<std::mutex> lock(data_if_mutex_);
     if (enable == output_enabled_) {
         return;
     }

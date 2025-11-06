@@ -41,22 +41,11 @@ void AudioCodec::Start() {
     }
 
     if (tx_handle_ != nullptr) {
-        esp_err_t err = i2s_channel_enable(tx_handle_);
-        if (err == ESP_ERR_INVALID_STATE) {
-            // 已经启用，忽略
-            ESP_LOGW(TAG, "TX channel already enabled");
-        } else {
-            ESP_ERROR_CHECK(err);
-        }
+        ESP_ERROR_CHECK(i2s_channel_enable(tx_handle_));
     }
 
     if (rx_handle_ != nullptr) {
-        esp_err_t err = i2s_channel_enable(rx_handle_);
-        if (err == ESP_ERR_INVALID_STATE) {
-            ESP_LOGW(TAG, "RX channel already enabled");
-        } else {
-            ESP_ERROR_CHECK(err);
-        }
+        ESP_ERROR_CHECK(i2s_channel_enable(rx_handle_));
     }
 
     EnableInput(true);

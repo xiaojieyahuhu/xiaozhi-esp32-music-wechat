@@ -5,8 +5,6 @@
 
 #include <esp_codec_dev.h>
 #include <esp_codec_dev_defaults.h>
-#include <mutex>
-
 
 class BoxAudioCodec : public AudioCodec {
 private:
@@ -19,7 +17,6 @@ private:
 
     esp_codec_dev_handle_t output_dev_ = nullptr;
     esp_codec_dev_handle_t input_dev_ = nullptr;
-    std::mutex data_if_mutex_;
 
     void CreateDuplexChannels(gpio_num_t mclk, gpio_num_t bclk, gpio_num_t ws, gpio_num_t dout, gpio_num_t din);
 

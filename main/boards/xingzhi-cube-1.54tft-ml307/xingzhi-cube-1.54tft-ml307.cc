@@ -9,6 +9,7 @@
 #include "led/single_led.h"
 #include "assets/lang_config.h"
 #include "../xingzhi-cube-1.54tft-wifi/power_manager.h"
+#include "../otto-robot/otto_emoji_display.h"
 
 #include <esp_log.h>
 #include <esp_lcd_panel_vendor.h>
@@ -19,12 +20,16 @@
 
 #define TAG "XINGZHI_CUBE_1_54TFT_ML307"
 
+LV_FONT_DECLARE(font_puhui_20_4);
+LV_FONT_DECLARE(font_awesome_20_4);
+
+
 class XINGZHI_CUBE_1_54TFT_ML307 : public DualNetworkBoard {
 private:
     Button boot_button_;
     Button volume_up_button_;
     Button volume_down_button_;
-    SpiLcdDisplay* display_;
+    OttoEmojiDisplay* display_;
     PowerSaveTimer* power_save_timer_;
     PowerManager* power_manager_;
     esp_lcd_panel_io_handle_t panel_io_ = nullptr;
@@ -156,8 +161,17 @@ private:
         ESP_ERROR_CHECK(esp_lcd_panel_mirror(panel_, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y));
         ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_, true));
 
-        display_ = new SpiLcdDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, 
-            DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+        display_ = new OttoEmojiDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, 
+            DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY, 
+        {
+            .text_font = &font_puhui_20_4,
+            .icon_font = &font_awesome_20_4,
+#if CONFIG_USE_WECHAT_MESSAGE_STYLE
+            .emoji_font = font_emoji_32_init(),
+#else
+            .emoji_font = font_emoji_64_init(),
+#endif
+        });
     }
 
 public:

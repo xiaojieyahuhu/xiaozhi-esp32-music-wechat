@@ -5,6 +5,8 @@
 
 #include "oscillator.h"
 
+static const char* TAG = "Movements";
+
 Otto::Otto() {
     is_otto_resting_ = false;
     for (int i = 0; i < SERVO_COUNT; i++) {

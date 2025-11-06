@@ -16,6 +16,9 @@
 
 #define TAG "KevinBoxBoard"
 
+LV_FONT_DECLARE(font_puhui_14_1);
+LV_FONT_DECLARE(font_awesome_14_1);
+
 class KevinBoxBoard : public Ml307Board {
 private:
     i2c_master_bus_handle_t display_i2c_bus_;
@@ -112,7 +115,8 @@ private:
         ESP_LOGI(TAG, "Turning display on");
         ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_, true));
 
-        display_ = new OledDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y);
+        display_ = new OledDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y,
+            {&font_puhui_14_1, &font_awesome_14_1});
     }
 
     void InitializeCodecI2c() {
@@ -184,7 +188,7 @@ public:
 
         InitializeButtons();
     }
-
+    
     virtual Led* GetLed() override {
         static SingleLed led(BUILTIN_LED_GPIO);
         return &led;

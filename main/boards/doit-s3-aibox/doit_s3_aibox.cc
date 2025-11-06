@@ -99,6 +99,7 @@ private:
         });
     }
 
+
     void InitializeGpio(gpio_num_t gpio_num_) {
         gpio_config_t config = {
             .pin_bit_mask = (1ULL << gpio_num_),

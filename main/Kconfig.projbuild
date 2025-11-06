@@ -6,27 +6,6 @@ config OTA_URL
     help
         The application will access this URL to check for new firmwares and server address.
 
-choice
-    prompt "Flash Assets"
-    default FLASH_NONE_ASSETS
-    help
-        Select the assets to flash.
-
-    config FLASH_NONE_ASSETS
-        bool "Do not flash assets"
-    config FLASH_DEFAULT_ASSETS
-        bool "Flash Default Assets"
-    config FLASH_CUSTOM_ASSETS
-        bool "Flash Custom Assets"
-endchoice
-
-config CUSTOM_ASSETS_FILE
-    depends on FLASH_CUSTOM_ASSETS
-    string "Custom Assets File"
-    default "assets.bin"
-    help
-        The custom assets file to flash.
-        It can be a local file relative to the project directory or a remote url.
 
 choice
     prompt "Default Language"
@@ -42,42 +21,6 @@ choice
         bool "English"
     config LANGUAGE_JA_JP
         bool "Japanese"
-    config LANGUAGE_KO_KR
-        bool "Korean"
-    config LANGUAGE_VI_VN
-        bool "Vietnamese"
-    config LANGUAGE_TH_TH
-        bool "Thai"
-    config LANGUAGE_DE_DE
-        bool "German"
-    config LANGUAGE_FR_FR
-        bool "French"
-    config LANGUAGE_ES_ES
-        bool "Spanish"
-    config LANGUAGE_IT_IT
-        bool "Italian"
-    config LANGUAGE_RU_RU
-        bool "Russian"
-    config LANGUAGE_AR_SA
-        bool "Arabic"
-    config LANGUAGE_HI_IN
-        bool "Hindi"
-    config LANGUAGE_PT_PT
-        bool "Portuguese"
-    config LANGUAGE_PL_PL
-        bool "Polish"
-    config LANGUAGE_CS_CZ
-        bool "Czech"
-    config LANGUAGE_FI_FI
-        bool "Finnish"
-    config LANGUAGE_TR_TR
-        bool "Turkish"
-    config LANGUAGE_ID_ID
-        bool "Indonesian"
-    config LANGUAGE_UK_UA
-        bool "Ukrainian"
-    config LANGUAGE_RO_RO
-        bool "Romanian"
 endchoice
 
 choice BOARD_TYPE
@@ -94,9 +37,6 @@ choice BOARD_TYPE
     config BOARD_TYPE_BREAD_COMPACT_WIFI_CAM
         bool "面包板新版接线（WiFi）+ LCD + Camera"
         depends on IDF_TARGET_ESP32S3     
-    config BOARD_TYPE_ESP32S3_SMART_SPEAKER
-        bool "ESP32-S3 智能音箱（PCM5102+INMP441）"
-        depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_BREAD_COMPACT_ML307
         bool "面包板新版接线（ML307 AT）"
         depends on IDF_TARGET_ESP32S3
@@ -202,15 +142,9 @@ choice BOARD_TYPE
     config BOARD_TYPE_ATOMS3R_CAM_M12_ECHO_BASE
         bool "AtomS3R CAM/M12 + Echo Base"
         depends on IDF_TARGET_ESP32S3
-    config BOARD_TYPE_ATOM_ECHOS3R
-        bool "AtomEchoS3R"
-        depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_ATOMMATRIX_ECHO_BASE
         bool "AtomMatrix + Echo Base"
         depends on IDF_TARGET_ESP32
-    config BOARD_TYPE_ESP32S3_AUDIO_BOARD
-        bool "Waveshare ESP32-S3-Audio-Board"
-        depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_ESP32S3_Touch_AMOLED_1_8
         bool "Waveshare ESP32-S3-Touch-AMOLED-1.8"
         depends on IDF_TARGET_ESP32S3
@@ -315,9 +249,13 @@ choice BOARD_TYPE
     config BOARD_TYPE_XINGZHI_Cube_1_54TFT_WIFI
         bool "无名科技星智1.54(WIFI)"
         depends on IDF_TARGET_ESP32S3
+        select LV_USE_GIF
+        select LV_GIF_CACHE_DECODE_DATA
     config BOARD_TYPE_XINGZHI_Cube_1_54TFT_ML307
         bool "无名科技星智1.54(ML307)"
         depends on IDF_TARGET_ESP32S3
+        select LV_USE_GIF
+        select LV_GIF_CACHE_DECODE_DATA
     config BOARD_TYPE_SENSECAP_WATCHER
         bool "SenseCAP Watcher"
         depends on IDF_TARGET_ESP32S3
@@ -332,9 +270,6 @@ choice BOARD_TYPE
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_ESP_S3_LCD_EV_Board
         bool "乐鑫ESP S3 LCD EV Board开发板"
-        depends on IDF_TARGET_ESP32S3
-    config BOARD_TYPE_ESP_S3_LCD_EV_Board_2
-        bool "乐鑫ESP S3 LCD EV Board 2开发板"
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_ZHENGCHEN_1_54TFT_WIFI
         bool "征辰科技1.54(WIFI)"
@@ -373,9 +308,6 @@ choice BOARD_TYPE
     config BOARD_TYPE_SURFER_C3_1_14TFT
         bool "Surfer-C3-1-14TFT"
         depends on IDF_TARGET_ESP32C3
-    config BOARD_TYPE_YUNLIAO_S3
-        bool "小智云聊-S3"
-        depends on IDF_TARGET_ESP32S3
 endchoice
 
 choice ESP_S3_LCD_EV_Board_Version_TYPE
@@ -455,25 +387,13 @@ endchoice
 choice DISPLAY_ESP32S3_KORVO2_V3
     depends on BOARD_TYPE_ESP32S3_KORVO2_V3
     prompt "ESP32S3_KORVO2_V3 LCD Type"
-    default ESP32S3_KORVO2_V3_LCD_ST7789
+    default LCD_ST7789
     help
         屏幕类型选择
-    config ESP32S3_KORVO2_V3_LCD_ST7789
+    config LCD_ST7789
         bool "ST7789, 分辨率240*280"
-    config ESP32S3_KORVO2_V3_LCD_ILI9341
+    config LCD_ILI9341
         bool "ILI9341, 分辨率240*320"
-endchoice
-
-choice DISPLAY_ESP32S3_AUDIO_BOARD
-    depends on BOARD_TYPE_ESP32S3_AUDIO_BOARD
-    prompt "ESP32S3_AUDIO_BOARD LCD Type"
-    default AUDIO_BOARD_LCD_JD9853
-    help
-        屏幕类型选择
-    config AUDIO_BOARD_LCD_JD9853
-        bool "JD9853, 分辨率320*172"
-    config AUDIO_BOARD_LCD_ST7789
-        bool "ST7789, 分辨率240*320"
 endchoice
 
 config USE_WECHAT_MESSAGE_STYLE
@@ -535,7 +455,7 @@ config USE_AUDIO_PROCESSOR
 config USE_DEVICE_AEC
     bool "Enable Device-Side AEC"
     default n
-        depends on USE_AUDIO_PROCESSOR && (BOARD_TYPE_ESP_BOX_3 || BOARD_TYPE_ESP_BOX || BOARD_TYPE_ESP_BOX_LITE || BOARD_TYPE_LICHUANG_DEV || BOARD_TYPE_ESP32S3_KORVO2_V3 || BOARD_TYPE_ESP32S3_Touch_AMOLED_1_75 || BOARD_TYPE_ESP32S3_Touch_AMOLED_2_06 || BOARD_TYPE_ESP32P4_WIFI6_Touch_LCD_4B || BOARD_TYPE_ESP32P4_WIFI6_Touch_LCD_XC || BOARD_TYPE_ESP_S3_LCD_EV_Board_2 || BOARD_TYPE_YUNLIAO_S3)
+        depends on USE_AUDIO_PROCESSOR && (BOARD_TYPE_ESP_BOX_3 || BOARD_TYPE_ESP_BOX || BOARD_TYPE_ESP_BOX_LITE || BOARD_TYPE_LICHUANG_DEV || BOARD_TYPE_ESP32S3_KORVO2_V3 || BOARD_TYPE_ESP32S3_Touch_AMOLED_1_75 || BOARD_TYPE_ESP32S3_Touch_AMOLED_2_06 || BOARD_TYPE_ESP32P4_WIFI6_Touch_LCD_4B || BOARD_TYPE_ESP32P4_WIFI6_Touch_LCD_XC)
     help
         因为性能不够，不建议和微信聊天界面风格同时开启
 
@@ -571,25 +491,36 @@ config RECEIVE_CUSTOM_MESSAGE
     help
         启用接收自定义消息功能，允许设备接收来自服务器的自定义消息（最好通过 MQTT 协议）
 
-menu "TAIJIPAI_S3_CONFIG"
+choice I2S_TYPE_TAIJIPI_S3
     depends on BOARD_TYPE_ESP32S3_Taiji_Pi
-    choice I2S_TYPE_TAIJIPI_S3
-        depends on BOARD_TYPE_ESP32S3_Taiji_Pi
-        prompt "taiji-pi-S3 I2S Type"
-        default TAIJIPAI_I2S_TYPE_STD
-        help
-            I2S 类型选择
-        config TAIJIPAI_I2S_TYPE_STD
-            bool "I2S Type STD"
-        config TAIJIPAI_I2S_TYPE_PDM
-            bool "I2S Type PDM"
-    endchoice
+    prompt "taiji-pi-S3 I2S Type"
+    default TAIJIPAI_I2S_TYPE_STD
+    help
+        I2S 类型选择
+    config TAIJIPAI_I2S_TYPE_STD
+        bool "I2S Type STD"
+    config TAIJIPAI_I2S_TYPE_PDM
+        bool "I2S Type PDM"
+endchoice
 
-    config I2S_USE_2SLOT
-    bool "Enable Use 2 Slot"
+config ENABLE_MESSAGE_PUSHER
+    bool "Enable Message Pusher (WxPusher)"
     default n
     help
-        启动双声道
-endmenu
+        启用留言推送功能，当用户说"留言XXX"时，自动通过微信推送器发送消息
+
+config MESSAGE_PUSHER_APP_TOKEN
+    string "WxPusher App Token"
+    default "你的token"
+    depends on ENABLE_MESSAGE_PUSHER
+    help
+        微信推送器的 App Token，从 https://wxpusher.zjiecode.com/ 获取
+
+config MESSAGE_PUSHER_UID
+    string "WxPusher User UID"
+    default "发送人uid"
+    depends on ENABLE_MESSAGE_PUSHER
+    help
+        微信推送器的用户 UID，从 https://wxpusher.zjiecode.com/ 获取
 
 endmenu

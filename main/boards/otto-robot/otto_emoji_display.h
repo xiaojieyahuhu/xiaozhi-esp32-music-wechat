@@ -16,7 +16,7 @@ public:
      */
     OttoEmojiDisplay(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_handle_t panel, int width,
                      int height, int offset_x, int offset_y, bool mirror_x, bool mirror_y,
-                     bool swap_xy);
+                     bool swap_xy, DisplayFonts fonts);
 
     virtual ~OttoEmojiDisplay() = default;
 
@@ -25,6 +25,12 @@ public:
 
     // 重写聊天消息设置方法
     virtual void SetChatMessage(const char* role, const char* content) override;
+
+    // 添加SetIcon方法声明
+    virtual void SetIcon(const char* icon) override;
+
+    // 重写SetMusicInfo方法
+    virtual void SetMusicInfo(const char* song_name) override;
 
 private:
     void SetupGifContainer();

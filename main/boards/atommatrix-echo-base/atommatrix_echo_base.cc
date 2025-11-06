@@ -33,6 +33,7 @@ public:
     }
 };
 
+
 class AtomMatrixEchoBaseBoard : public WifiBoard {
 private:
     i2c_master_bus_handle_t i2c_bus_;
@@ -85,6 +86,7 @@ private:
         pi4ioe_ = new Pi4ioe(i2c_bus_, PI4IOE_ADDR);
         pi4ioe_->SetSpeakerMute(false);
     }
+
 
     void InitializeButtons() {
         face_button_.OnClick([this]() {

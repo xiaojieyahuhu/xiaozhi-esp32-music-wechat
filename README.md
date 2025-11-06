@@ -1,98 +1,94 @@
-# 超级小智-ESP32
-（中文 | English(编写中) | 日本語(编写中)）
+# 小智开源音乐固件
 
-基于 https://github.com/78/xiaozhi-esp32 改良的船新版本
+（中文 | [English](README_en.md) | [日本語](README_ja.md)）
 
-## 💡介绍
-这是一个由虾哥开源的 ESP32 项目，以 MIT 许可证发布，允许任何人免费使用，或用于商业用途。
+## 视频
 
-我们希望通过这个项目，能够帮助大家了解 AI 硬件开发，将当下飞速发展的大语言模型应用到实际的硬件设备中。
+👉 [【开源】虾哥ai小智机器音乐播放器纯固件带歌词显示](https://www.bilibili.com/video/BV19oM4zqEiz)
 
-如果你有任何想法或建议，请随时提出 Issues 或加入 QQ 群：暂无，Telegram群：暂无。
+👉 [【开源】虾哥小智音乐播放器纯固件](https://www.bilibili.com/video/BV1RqMEzEEp1)
 
-项目主要贡献者：小霜霜Meow(抖音、B站UP)、空白泡泡糖果（B站UP），硅灵造物科技（B站UP）
+## 介绍
 
-项目其它贡献者：[@zhubinsheng](https://github.com/zhubinsheng)
+这是一个由虾哥开源的[ESP32项目](https://github.com/78/xiaozhi-esp32)，以 MIT 许可证发布，允许任何人免费使用，或用于商业用途。
 
-贡献者说明：引入部分其它贡献者在其它项目上的代码，并进行了部分修改。
+本项目基于 [Maggotxy/xiaozhi-esp32-music](https://github.com/Maggotxy/xiaozhi-esp32-music) 进行二次开发，新增了微信留言推送功能，并修复了 ML307 4G 网络下的兼容性问题。
 
-音乐服务器、相关源码提供者(为爱发电)：小霜霜Meow
+**开发时间**: 2025年11月6日
 
-音乐服务器源码请见 https://github.com/IntelligentlyEverything/MeowMusicServer
+我们希望通过这个项目，让大家的小智都能播放歌曲。
 
-### ❕注意事项
-1. 如果小智说找不到歌曲怎么办？
+如果你有任何想法或建议，请随时提出 Issues 或加入 QQ 群：826072986
+
+项目主要贡献者：空白泡泡糖果（B站UP），硅灵造物科技（B站UP）
+
+音乐服务器提供者（为爱发电）：一撒
+
+### 💡注意事项
+
+#### 1. 如果小智说找不到歌曲怎么办？
 进入[小智后台](https://xiaozhi.me/)，找到对应设备，修改角色配置
 - 选择 DeepSeekV3 大语言模型
 - 在人物介绍中填入
-    - 收到音乐相关的需求时，只使用 MPC tool self.music.play_song 工具，同时禁止使用 search_music 功能。
+  - 收到音乐相关的需求时，只使用 MPC tool `self.music.play_song` 工具，同时禁止使用 `search_music` 功能。
 
-2. 内置API调用失败怎么办？
-请查看具体错误代码后，加入QQ群：865754861，或电报群 http://t.me/MeowMusicServer 给出错误代码和日志，等待我们修复。
+#### 2. 如何启用微信留言推送功能？
+默认情况下，留言推送功能是关闭的。需要：
+- 在 `sdkconfig` 中启用 `CONFIG_ENABLE_MESSAGE_PUSHER=y`
+- 配置 WxPusher 的 AppToken 和 UID
+- 详细配置步骤请参考 [微信留言推送配置](#微信留言推送配置) 章节
 
-### ⚙️已支持硬件芯片系列
+#### 3. 暂不支持的开发板
+- ESP32C3芯片的开发板
 
-- ESP32
-- ESP32-S3
-- ESP32-C3
-- ESP32-C6
-- ESP32-P4
-
-❕大部分硬件由于没有进行完整测试，可能会存在一些问题，属于正常现象，具体可提交issues进行反馈。
 
 ### 项目改动范围
-新增:
-- main/schedule_manager.h
-- main/schedule_manager.cc
-- main/audio/timer_manager.h
-- main/audio/timer_manager.cc
-- main/boards/common/music.h
-- main/boards/common/esp32_music.h
-- main/boards/common/esp32_music.cc
-- main/display/esplog_display.h
-- main/display/esplog_display.cc
-- main/protocols/sleep_music_protocol.h
-- main/protocols/sleep_music_protocol.cc
 
-修改:
-- main/audio/codecs/no_audio_codec.h
-- main/audio/codecs/no_audio_codec.cc
-- main/audio/audio_codec.h
-- main/audio/audio_codec.cc
-- main/audio/audio_service.h
-- main/audio/audio_service.cc
-- main/boards/common/board.h
-- main/boards/common/board.cc
-- main/display/display.h
-- main/display/display.cc
-- main/display/lcd_display.h
-- main/display/lcd_display.cc
-- main/application.h
-- main/application.cc
-- main/idf_component.yml
-- main/mcp_server.cc
+#### 新增
+- main\boards\common\music.h
+- main\boards\common\esp32_music.cc
+- main\boards\common\esp32_music.h
+- main\message_pusher.cc
+- main\message_pusher.h
+
+#### 修改
+- main\mcp_server.cc
+- main\boards\common\board.cc
+- main\boards\common\board.h
+- main\application.cc
+- main\application.h
+- main\display\display.cc
+- main\display\display.h
+- main\audio\audio_service.cc
+- main\audio\audio_service.h
+- main\idf_component.yml
+
+
 
 ### 基于 MCP 控制万物
+
 小智 AI 聊天机器人作为一个语音交互入口，利用 Qwen / DeepSeek 等大模型的 AI 能力，通过 MCP 协议实现多端控制。
 
 ![通过MCP控制万物](docs/mcp-based-graph.jpg)
 
 ### 已实现功能
 
-- Wi-Fi / ML307 Cat.1 4G
-- 离线语音唤醒 [ESP-SR](https://github.com/espressif/esp-sr)
-- 支持两种通信协议（[Websocket](docs/websocket.md) 或 MQTT+UDP）
-- 采用 OPUS 音频编解码
-- 基于流式 ASR + LLM + TTS 架构的语音交互
-- 声纹识别，识别当前说话人的身份 [3D Speaker](https://github.com/modelscope/3D-Speaker)
-- OLED / LCD 显示屏，支持表情显示
-- 电量显示与电源管理
-- 支持多语言（中文、英文、日文）
-- 支持 ESP32-C3、ESP32-S3、ESP32-P4 芯片平台
-- 通过设备端 MCP 实现设备控制（音量、灯光、电机、GPIO 等）
-- 通过云端 MCP 扩展大模型能力（智能家居控制、PC桌面操作、知识搜索、邮件收发等）
-本项目新增功能:
-- 新增音乐播放功能，支持播放本地音乐(开发中，敬请期待)、云端音乐(完善中)。
+- 🎭 **丰富的角色定制系统**：支持台湾女友、土豆子、English Tutor 等多种预设角色
+- 🎨 **个性化配置**：自定义助手昵称、对话语言、角色音色和性格介绍
+- 🎵 **智能音乐控制**：支持 `self.music.play_song` 工具进行音乐播放控制
+- 💬 **微信留言推送**：支持 `self.message.send_to_wechat` 工具，通过语音指令发送留言到微信
+- 📡 Wi-Fi / ML307 Cat.1 4G 网络连接
+- 🗣️ 离线语音唤醒 [ESP-SR](https://github.com/espressif/esp-sr)
+- 🔗 支持两种通信协议（[Websocket](docs/websocket.md) 或 MQTT+UDP）
+- 🎧 采用 OPUS 音频编解码
+- 🤖 基于流式 ASR + LLM + TTS 架构的语音交互
+- 👤 声纹识别，识别当前说话人的身份 [3D Speaker](https://github.com/modelscope/3D-Speaker)
+- 📺 OLED / LCD 显示屏，支持表情显示
+- 🔋 电量显示与电源管理
+- 🌍 支持多语言（中文、英文、日文）
+- 💻 支持 ESP32-C3、ESP32-S3、ESP32-P4 芯片平台
+- 🏠 通过设备端 MCP 实现设备控制（音量、灯光、电机、GPIO 等）
+- ☁️ 通过云端 MCP 扩展大模型能力（智能家居控制、PC桌面操作、知识搜索、邮件收发等）
 
 ## 硬件
 
@@ -182,14 +178,77 @@
 - [自定义开发板指南](main/boards/README.md) - 学习如何为小智 AI 创建自定义开发板
 - [MCP 协议物联网控制用法说明](docs/mcp-usage.md) - 了解如何通过 MCP 协议控制物联网设备
 - [MCP 协议交互流程](docs/mcp-protocol.md) - 设备端 MCP 协议的实现方式
-- [MQTT + UDP 混合通信协议文档](docs/mqtt-udp.md)
 - [一份详细的 WebSocket 通信协议文档](docs/websocket.md)
 
 ## 大模型配置
 
-如果你已经拥有一个小智 AI 聊天机器人设备，并且已接入官方服务器，可以登录 [xiaozhi.me](https://xiaozhi.me) 控制台进行配置。
+如果你已经拥有一个的小智 AI 聊天机器人设备，并且已接入官方服务器，可以登录 [xiaozhi.me](https://xiaozhi.me) 控制台进行配置。
+
+### 🎭 角色配置指南
+
+在 [xiaozhi.me](https://xiaozhi.me) 控制台中，您可以：
+
+1. **选择角色模板**：从台湾女友、土豆子、English Tutor、好奇小男孩、汪汪队队长等预设角色中选择
+2. **设置助手昵称**：为您的 AI 伴侣起一个专属的名字（默认：小智）
+3. **配置对话语言**：支持普通话、英语、日语等多种语言
+4. **选择角色音色**：清澈小何等多种音色可供选择
+5. **自定义角色介绍**：详细描述角色的性格特点和背景设定
+
+💡 **特别功能**：收到音乐相关需求时，小智会优先使用 `self.music.play_song` 工具，确保音乐播放体验的流畅性。
 
 👉 [后台操作视频教程（旧版界面）](https://www.bilibili.com/video/BV1jUCUY2EKM/)
+
+## 微信留言推送配置
+
+小智支持通过语音指令发送留言到微信，使用 [WxPusher](https://wxpusher.zjiecode.com/) 消息推送服务实现。
+
+### 📱 配置步骤
+
+1. **注册 WxPusher 账号**
+   - 访问 [WxPusher 官网](https://wxpusher.zjiecode.com/admin/main)
+   - 使用微信扫码注册并登录
+
+2. **创建应用并获取 AppToken**
+   - 在控制台创建新应用
+   - 复制应用的 `AppToken`
+
+3. **获取用户 UID**
+   - 在"我的"页面找到您的 `UID`
+   - 或使用微信关注"WxPusher"公众号后，在对话中获取 UID
+
+4. **修改配置文件**
+   - 打开项目根目录下的 `sdkconfig` 文件
+   - 找到以下配置项并修改：
+   ```
+   # CONFIG_ENABLE_MESSAGE_PUSHER is not set
+   ```
+   修改为：
+   ```
+   CONFIG_ENABLE_MESSAGE_PUSHER=y
+   CONFIG_MESSAGE_PUSHER_APP_TOKEN="你的AppToken"
+   CONFIG_MESSAGE_PUSHER_UID="你的UID"
+   ```
+   - 或者使用 `idf.py menuconfig` 命令，在 `Xiaozhi Assistant` 菜单中配置
+
+### 🎯 使用方法
+
+配置完成后，您可以通过以下语音指令使用留言功能：
+
+```
+"给小杰说，今天晚上不回家了"
+"留言我在公司加班"
+"告诉小明我想你了"
+"跟妈妈说，我会晚点回去"
+```
+
+小智会自动识别留言意图，提取留言内容，并通过微信推送到配置的账号。
+
+### 🔧 技术特性
+
+- ✅ 支持 WiFi 和 ML307 4G 网络
+- ✅ 自动 URL 编码，支持中文内容
+- ✅ 基于 MCP 协议的 `self.message.send_to_wechat` 工具
+- ✅ 实时推送，秒级送达
 
 ## 相关开源项目
 
@@ -206,13 +265,3 @@
 - [100askTeam/xiaozhi-linux](http://github.com/100askTeam/xiaozhi-linux) 百问科技提供的 Linux 客户端
 - [78/xiaozhi-sf32](https://github.com/78/xiaozhi-sf32) 思澈科技的蓝牙芯片固件
 - [QuecPython/solution-xiaozhiAI](https://github.com/QuecPython/solution-xiaozhiAI) 移远提供的 QuecPython 固件
-
-## Star History
-
-<a href="https://star-history.com/#IntelligentlyEverything/xiaozhi-esp32&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=IntelligentlyEverything/xiaozhi-esp32&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=IntelligentlyEverything/xiaozhi-esp32&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=IntelligentlyEverything/xiaozhi-esp32&type=Date" />
- </picture>
-</a>

@@ -19,6 +19,10 @@
 
 #define TAG "ZHENGCHEN_1_54TFT_WIFI"
 
+LV_FONT_DECLARE(font_puhui_20_4);
+LV_FONT_DECLARE(font_awesome_20_4);
+
+
 class ZHENGCHEN_1_54TFT_WIFI : public WifiBoard {
 private:
     Button boot_button_;
@@ -86,6 +90,7 @@ private:
             }
             app.ToggleChatState();
         });
+
 
         // 设置开机按钮的长按事件（直接进入配网模式）
         boot_button_.OnLongPress([this]() {
@@ -161,7 +166,12 @@ private:
         ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_, true));
 
         display_ = new ZHENGCHEN_LcdDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, 
-            DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+            DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY, 
+        {
+            .text_font = &font_puhui_20_4,
+            .icon_font = &font_awesome_20_4,
+            .emoji_font = font_emoji_64_init(),
+        });
         display_->SetupHighTempWarningPopup();
     }
 
@@ -169,7 +179,7 @@ private:
     }
 
 public:
-    ZHENGCHEN_1_54TFT_WIFI() :
+ZHENGCHEN_1_54TFT_WIFI() :
         boot_button_(BOOT_BUTTON_GPIO),
         volume_up_button_(VOLUME_UP_BUTTON_GPIO),
         volume_down_button_(VOLUME_DOWN_BUTTON_GPIO) {

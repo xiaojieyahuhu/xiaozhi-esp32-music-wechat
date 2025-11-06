@@ -18,6 +18,9 @@
 
 #define TAG "LilygoTCameraPlusS3Board"
 
+LV_FONT_DECLARE(font_puhui_16_4);
+LV_FONT_DECLARE(font_awesome_16_4);
+
 class Cst816x : public I2cDevice {
 public:
     struct TouchPoint_t {
@@ -130,7 +133,7 @@ private:
         }
     }
 
-    static void TouchpadDaemon(void *param) {
+    static void touchpad_daemon(void *param) {
         vTaskDelay(pdMS_TO_TICKS(2000));
         auto &board = (LilygoTCameraPlusS3Board&)Board::GetInstance();
         auto touchpad = board.GetTouchpad();
@@ -156,7 +159,7 @@ private:
     void InitCst816d() {
         ESP_LOGI(TAG, "Init CST816x");
         cst816d_ = new Cst816x(i2c_bus_, CST816_ADDRESS);
-        xTaskCreate(TouchpadDaemon, "tp", 2048, NULL, 5, NULL);
+        xTaskCreate(touchpad_daemon, "tp", 2048, NULL, 5, NULL);
     }
 
     void InitSpi() {
@@ -204,7 +207,12 @@ private:
         ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel, true));
 
         display_ = new SpiLcdDisplay(panel_io, panel,
-                                     DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
+                                     DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY,
+                                     {
+                                         .text_font = &font_puhui_16_4,
+                                         .icon_font = &font_awesome_16_4,
+                                         .emoji_font = font_emoji_32_init(),
+                                     });
     }
 
     void InitializeButtons() {

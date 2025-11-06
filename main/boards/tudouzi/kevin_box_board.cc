@@ -8,6 +8,7 @@
 #include "power_save_timer.h"
 #include "axp2101.h"
 #include "assets/lang_config.h"
+#include "font_awesome_symbols.h"
 
 #include <esp_log.h>
 #include <driver/gpio.h>
@@ -16,6 +17,10 @@
 #include <esp_lcd_panel_vendor.h>
 
 #define TAG "KevinBoxBoard"
+
+LV_FONT_DECLARE(font_puhui_14_1);
+LV_FONT_DECLARE(font_awesome_14_1);
+
 
 class Pmic : public Axp2101 {
 public:
@@ -44,6 +49,7 @@ public:
         WriteReg(0x50, 0x14); // set TS pin to EXTERNAL input (not temperature)
     }
 };
+
 
 class KevinBoxBoard : public Ml307Board {
 private:
@@ -142,7 +148,8 @@ private:
         ESP_LOGI(TAG, "Turning display on");
         ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_, true));
 
-        display_ = new OledDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y);
+        display_ = new OledDisplay(panel_io_, panel_, DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y,
+            {&font_puhui_14_1, &font_awesome_14_1});
     }
 
     void InitializeCodecI2c() {
