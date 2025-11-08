@@ -286,3 +286,63 @@
 - [100askTeam/xiaozhi-linux](http://github.com/100askTeam/xiaozhi-linux) 百问科技提供的 Linux 客户端
 - [78/xiaozhi-sf32](https://github.com/78/xiaozhi-sf32) 思澈科技的蓝牙芯片固件
 - [QuecPython/solution-xiaozhiAI](https://github.com/QuecPython/solution-xiaozhiAI) 移远提供的 QuecPython 固件
+
+## 贡献者
+
+感谢以下所有为本项目做出贡献的开发者！
+
+### 主要贡献者
+
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/xiaojieyahuhu">
+            <img src="https://github.com/xiaojieyahuhu.png" width="100px;" alt="xiaojieyahuhu"/>
+            <br />
+            <sub><b>小杰呀呼呼</b></sub>
+        </a>
+        <br />
+        <sub>项目维护者</sub>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Maggotxy">
+            <img src="https://github.com/Maggotxy.png" width="100px;" alt="Maggotxy"/>
+            <br />
+            <sub><b>Maggotxy</b></sub>
+        </a>
+        <br />
+        <sub>原始音乐功能开发者</sub>
+    </td>
+    <td align="center">
+        <a href="https://space.bilibili.com/yourbilibili">
+            <img src="https://via.placeholder.com/100/4A90E2/ffffff?text=空白泡泡糖果" width="100px;" alt="空白泡泡糖果"/>
+            <br />
+            <sub><b>空白泡泡糖果</b></sub>
+        </a>
+        <br />
+        <sub>B站UP主 · 核心开发</sub>
+    </td>
+    <td align="center">
+        <a href="https://space.bilibili.com/yourbilibili">
+            <img src="https://via.placeholder.com/100/E24A4A/ffffff?text=硅灵造物科技" width="100px;" alt="硅灵造物科技"/>
+            <br />
+            <sub><b>硅灵造物科技</b></sub>
+        </a>
+        <br />
+        <sub>B站UP主 · 核心开发</sub>
+    </td>
+</tr>
+</table>
+
+### 特别鸣谢
+
+- **一撒** - 音乐服务器提供者（为爱发电）🎵
+- **虾哥 ([@78](https://github.com/78))** - [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) 原始项目作者
+
+### 所有代码贡献者
+
+[![Contributors](https://contrib.rocks/image?repo=xiaojieyahuhu/xiaozhi-esp32-music)](https://github.com/xiaojieyahuhu/xiaozhi-esp32-music/graphs/contributors)
+
+---
+
+💖 **如果这个项目对你有帮助，欢迎 Star ⭐ 支持一下！**

@@ -223,6 +223,69 @@ Feishuドキュメントチュートリアルをご覧ください：
 
 - [huangjunsen0406/py-xiaozhi](https://github.com/huangjunsen0406/py-xiaozhi) Pythonクライアント
 - [TOM88812/xiaozhi-android-client](https://github.com/TOM88812/xiaozhi-android-client) Androidクライアント
+- [100askTeam/xiaozhi-linux](http://github.com/100askTeam/xiaozhi-linux) BaiWen Tech提供のLinuxクライアント
+- [78/xiaozhi-sf32](https://github.com/78/xiaozhi-sf32) SiCheng Tech提供のBluetoothチップファームウェア
+- [QuecPython/solution-xiaozhiAI](https://github.com/QuecPython/solution-xiaozhiAI) Quectel提供のQuecPythonファームウェア
+
+## 貢献者
+
+このプロジェクトに貢献してくださったすべての開発者の皆様に感謝します！
+
+### コア貢献者
+
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/xiaojieyahuhu">
+            <img src="https://github.com/xiaojieyahuhu.png" width="100px;" alt="xiaojieyahuhu"/>
+            <br />
+            <sub><b>xiaojieyahuhu</b></sub>
+        </a>
+        <br />
+        <sub>プロジェクトメンテナー</sub>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Maggotxy">
+            <img src="https://github.com/Maggotxy.png" width="100px;" alt="Maggotxy"/>
+            <br />
+            <sub><b>Maggotxy</b></sub>
+        </a>
+        <br />
+        <sub>オリジナル音楽機能開発者</sub>
+    </td>
+    <td align="center">
+        <a href="https://space.bilibili.com/yourbilibili">
+            <img src="https://via.placeholder.com/100/4A90E2/ffffff?text=空白泡泡糖果" width="100px;" alt="空白泡泡糖果"/>
+            <br />
+            <sub><b>空白泡泡糖果</b></sub>
+        </a>
+        <br />
+        <sub>Bilibiliクリエイター · コア開発</sub>
+    </td>
+    <td align="center">
+        <a href="https://space.bilibili.com/yourbilibili">
+            <img src="https://via.placeholder.com/100/E24A4A/ffffff?text=硅灵造物科技" width="100px;" alt="硅灵造物科技"/>
+            <br />
+            <sub><b>硅灵造物科技</b></sub>
+        </a>
+        <br />
+        <sub>Bilibiliクリエイター · コア開発</sub>
+    </td>
+</tr>
+</table>
+
+### 特別感謝
+
+- **一撒（YiSa）** - 音楽サーバー提供者（ボランティア貢献）🎵
+- **虾哥（XiaGe）([@78](https://github.com/78))** - オリジナル[xiaozhi-esp32](https://github.com/78/xiaozhi-esp32)プロジェクト作者
+
+### すべてのコード貢献者
+
+[![Contributors](https://contrib.rocks/image?repo=xiaojieyahuhu/xiaozhi-esp32-music)](https://github.com/xiaojieyahuhu/xiaozhi-esp32-music/graphs/contributors)
+
+---
+
+💖 **このプロジェクトがお役に立ちましたら、ぜひ Star ⭐ をお願いします！**
 
 ## スター履歴
 

@@ -223,6 +223,69 @@ Other client projects using the XiaoZhi communication protocol:
 
 - [huangjunsen0406/py-xiaozhi](https://github.com/huangjunsen0406/py-xiaozhi) Python client
 - [TOM88812/xiaozhi-android-client](https://github.com/TOM88812/xiaozhi-android-client) Android client
+- [100askTeam/xiaozhi-linux](http://github.com/100askTeam/xiaozhi-linux) Linux client by BaiWen Tech
+- [78/xiaozhi-sf32](https://github.com/78/xiaozhi-sf32) Bluetooth chip firmware by SiCheng Tech
+- [QuecPython/solution-xiaozhiAI](https://github.com/QuecPython/solution-xiaozhiAI) QuecPython firmware by Quectel
+
+## Contributors
+
+Thanks to all developers who have contributed to this project!
+
+### Core Contributors
+
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/xiaojieyahuhu">
+            <img src="https://github.com/xiaojieyahuhu.png" width="100px;" alt="xiaojieyahuhu"/>
+            <br />
+            <sub><b>xiaojieyahuhu</b></sub>
+        </a>
+        <br />
+        <sub>Project Maintainer</sub>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Maggotxy">
+            <img src="https://github.com/Maggotxy.png" width="100px;" alt="Maggotxy"/>
+            <br />
+            <sub><b>Maggotxy</b></sub>
+        </a>
+        <br />
+        <sub>Original Music Feature Developer</sub>
+    </td>
+    <td align="center">
+        <a href="https://space.bilibili.com/yourbilibili">
+            <img src="https://via.placeholder.com/100/4A90E2/ffffff?text=KBP" width="100px;" alt="空白泡泡糖果"/>
+            <br />
+            <sub><b>KongBaiPaoPaoTangGuo</b></sub>
+        </a>
+        <br />
+        <sub>Bilibili Creator · Core Dev</sub>
+    </td>
+    <td align="center">
+        <a href="https://space.bilibili.com/yourbilibili">
+            <img src="https://via.placeholder.com/100/E24A4A/ffffff?text=GL" width="100px;" alt="硅灵造物科技"/>
+            <br />
+            <sub><b>GuiLing Tech</b></sub>
+        </a>
+        <br />
+        <sub>Bilibili Creator · Core Dev</sub>
+    </td>
+</tr>
+</table>
+
+### Special Thanks
+
+- **YiSa** - Music server provider (volunteer contribution) 🎵
+- **XiaGe ([@78](https://github.com/78))** - Original [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) project author
+
+### All Code Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=xiaojieyahuhu/xiaozhi-esp32-music)](https://github.com/xiaojieyahuhu/xiaozhi-esp32-music/graphs/contributors)
+
+---
+
+💖 **If this project helps you, please give it a Star ⭐ !**
 
 ## Star History
 
