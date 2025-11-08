@@ -192,6 +192,27 @@ Feishuドキュメントチュートリアルをご覧ください：
 
 ## 関連オープンソースプロジェクト
 
+### 🎵 音楽サーバー
+
+- [xiaojieyahuhu/MeowEmbeddedMusicServer](https://github.com/xiaojieyahuhu/MeowEmbeddedMusicServer) - 組み込みデバイス向けMeow音楽ストリーミングサービス
+  - 🎵 オンライン音楽再生、複数の音楽ソース対応（Kuwo、NetEase Cloud、Migu、Baiduなど）
+  - 📱 組み込みデバイス向け音楽ストリーミングサービス提供
+  - 📚 インテリジェントキャッシング機構による音楽ライブラリ管理
+  - 🔍 音楽検索とキャッシュ
+  - ⬇️ `url=true`パラメータによる音声ファイル直接ダウンロード対応
+  - 🎼 歌詞とカバーアートの自動取得
+  - 💾 Go言語で開発、優れたパフォーマンス
+  - 使用例：
+    ```
+    # 音楽情報の検索と取得
+    http://localhost:2233/stream_pcm?song=曲名&artist=アーティスト名
+    
+    # 音声ファイルの直接ダウンロード（4Gネットワークに適しています）
+    http://localhost:2233/stream_pcm?song=曲名&artist=アーティスト名&url=true
+    ```
+
+### シャオジーサーバー
+
 個人PCでサーバーをデプロイする場合は、以下のオープンソースプロジェクトを参照してください：
 
 - [xinnan-tech/xiaozhi-esp32-server](https://github.com/xinnan-tech/xiaozhi-esp32-server) Pythonサーバー

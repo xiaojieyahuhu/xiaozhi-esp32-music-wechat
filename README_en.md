@@ -192,6 +192,27 @@ Xiaozhi will automatically recognize the message intent, extract the content, an
 
 ## Related Open Source Projects
 
+### 🎵 Music Server
+
+- [xiaojieyahuhu/MeowEmbeddedMusicServer](https://github.com/xiaojieyahuhu/MeowEmbeddedMusicServer) - Meow Music Streaming Service for Embedded Devices
+  - 🎵 Online music playback, supports multiple music sources (Kuwo, NetEase Cloud, Migu, Baidu, etc.)
+  - 📱 Provides music streaming services for embedded devices
+  - 📚 Manages music library with intelligent caching mechanism
+  - 🔍 Search and cache music
+  - ⬇️ Supports direct audio file download via `url=true` parameter
+  - 🎼 Automatically fetches lyrics and cover art
+  - 💾 Developed in Go language, excellent performance
+  - Usage examples:
+    ```
+    # Search and get music information
+    http://localhost:2233/stream_pcm?song=song_name&artist=artist_name
+    
+    # Direct audio file download (suitable for 4G networks)
+    http://localhost:2233/stream_pcm?song=song_name&artist=artist_name&url=true
+    ```
+
+### XiaoZhi Servers
+
 For server deployment on personal computers, refer to the following open-source projects:
 
 - [xinnan-tech/xiaozhi-esp32-server](https://github.com/xinnan-tech/xiaozhi-esp32-server) Python server
